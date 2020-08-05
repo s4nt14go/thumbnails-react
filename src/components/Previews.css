@@ -1,0 +1,9 @@
+.dropContainer {
+  padding: 16px;
+  border: 1px #e8e8e8 solid;
+  border-radius: 3px;
+}
+
+.dropzone {
+  text-align: center;
+}
