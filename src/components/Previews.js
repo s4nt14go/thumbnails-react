@@ -45,6 +45,7 @@ function Previews(props) {
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
       })));
+      props.setFilename(acceptedFiles[0]);
     }
   });
 
@@ -62,7 +63,6 @@ function Previews(props) {
 
   useEffect(() => () => {
     // Make sure to revoke the data uris to avoid memory leaks
-    console.log('files', files);
     files.forEach(file => URL.revokeObjectURL(file.preview));
   }, [files]);
 
