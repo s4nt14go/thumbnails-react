@@ -11,7 +11,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Previews from './components/Previews';
-import BuildIcon from '@material-ui/icons/Build';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ReorderIcon from '@material-ui/icons/Reorder';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,6 +20,20 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   }
 }));
+
+const AWS = require('aws-sdk/global');
+// eslint-disable-next-line
+const S3 = require('aws-sdk/clients/s3');
+AWS.config.update({ accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY, secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY, region: process.env.REACT_APP_AWS_REGION });
+const s3 = new AWS.S3();
+/* Configurar el bucket deshabilitando el bloqueo a acceso público y agregando en CORS:
+      <CORSConfiguration>
+       <CORSRule>
+         <AllowedOrigin>*</AllowedOrigin>
+         <AllowedMethod>GET</AllowedMethod>
+         <AllowedHeader>*</AllowedHeader>
+       </CORSRule>
+      </CORSConfiguration>*/
 
 function App() {
 
@@ -42,14 +57,14 @@ function App() {
     setInProgress(true);
     axios(`${process.env.REACT_APP_GET_PRESIGNED_URL}=${filename.name}`).then(response => {
       // Getting the url from response
-      const url = response.data.fileUploadURL;
+      console.log('presigned url', response.data.fileUploadURL);
       axios({
         method: "PUT",
-        url: url,
+        url: response.data.fileUploadURL,
         data: filename,
         headers: { "Content-Type": "multipart/form-data" }
       })
-        .then(res => {
+        .then(_res => {
           setFeedback({
             open: true,
             severity: 'success',
@@ -70,23 +85,6 @@ function App() {
   }
 
   function handleList() {
-    const AWS = require('aws-sdk/global');
-
-    // eslint-disable-next-line
-    const S3 = require('aws-sdk/clients/s3');
-
-    // AWS.config.update({ accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY, region: process.env.AWS_REGION });
-    AWS.config.update({ accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY, secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY, region: process.env.REACT_APP_AWS_REGION });
-    const s3 = new AWS.S3();
-
-    /* Configurar el bucket deshabilitando el bloqueo a acceso público y agregando en CORS:
-      <CORSConfiguration>
-       <CORSRule>
-         <AllowedOrigin>*</AllowedOrigin>
-         <AllowedMethod>GET</AllowedMethod>
-         <AllowedHeader>*</AllowedHeader>
-       </CORSRule>
-      </CORSConfiguration>*/
 
     s3.listObjectsV2({ Bucket: process.env.REACT_APP_S3_BUCKET }, (err:any, data:any) => {
       if (err) {
@@ -118,7 +116,7 @@ function App() {
             variant="contained"
             color="secondary"
             className={classes.button}
-            startIcon={<BuildIcon />}
+            startIcon={<CloudUploadIcon />}
             onClick={handleUpload}
           >
             Upload
@@ -128,7 +126,7 @@ function App() {
             variant="contained"
             color="secondary"
             className={classes.button}
-            startIcon={<BuildIcon />}
+            startIcon={<ReorderIcon />}
             onClick={handleList}
           >
             List
