@@ -28,3 +28,7 @@
 .box {
   text-align: center;
 }
+
+.MuiSnackbar-anchorOriginBottomCenter {
+  bottom: 100px !important;
+}

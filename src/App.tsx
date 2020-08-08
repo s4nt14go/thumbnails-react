@@ -5,10 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { Box, Container } from "@material-ui/core";
-import Previews from "./components/Previews";
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import Previews from './components/Previews';
 import BuildIcon from '@material-ui/icons/Build';
-import axios from "axios";
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,9 +25,21 @@ function App() {
   const classes = useStyles();
   const [filename, setFilename] = useState();
   const [s3objects, setS3objects] = useState([]);
+  const [inProgress, setInProgress] = useState(false);
 
+  type Severity = 'success' | 'error';
+  const [feedback, setFeedback] = useState({
+    open: false,
+    severity: 'success' as Severity,
+    text: '',
+  });
+
+  function handleClose() {
+    setFeedback(s => ({...s, open: false}));
+  }
 
   function handleUpload() {
+    setInProgress(true);
     axios(`${process.env.REACT_APP_GET_PRESIGNED_URL}=${filename.name}`).then(response => {
       // Getting the url from response
       const url = response.data.fileUploadURL;
@@ -34,19 +50,22 @@ function App() {
         headers: { "Content-Type": "multipart/form-data" }
       })
         .then(res => {
-          console.log('res', res);
-          /*this.setState({
-            uploadSuccess: "File upload successfull",
-            error: undefined
-          });*/
+          setFeedback({
+            open: true,
+            severity: 'success',
+            text: 'File successfully uploaded!',
+          });
+          setInProgress(false);
         })
         .catch(err => {
           console.log('err', err);
-          /*this.setState({
-            error: "Error Occured while uploading the file",
-            uploadSuccess: undefined
-          });*/
-        });
+          setFeedback({
+            open: true,
+            severity: 'error',
+            text: err.toString(),
+          });
+          setInProgress(false);
+        }).finally(() => setInProgress(false));
     });
   }
 
@@ -91,7 +110,9 @@ function App() {
 
       <Container maxWidth='md'>
         <Box my={4} className='box'>
+
           <Previews setFilename={setFilename} />
+          {inProgress? <LinearProgress color="secondary" /> : <div style={{height: 4}}> </div>}<br />
 
           <Button
             variant="contained"
@@ -124,6 +145,12 @@ function App() {
               </div>
             })
             : null}
+
+          <Snackbar open={feedback.open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity={feedback.severity}>
+              {feedback.text}
+            </Alert>
+          </Snackbar>
 
         </Box>
       </Container>
