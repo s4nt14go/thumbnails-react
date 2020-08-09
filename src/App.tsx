@@ -21,19 +21,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+//----------------------------------------------------region s3.listObjectsV2 setup
 const AWS = require('aws-sdk/global');
 // eslint-disable-next-line
 const S3 = require('aws-sdk/clients/s3');
-AWS.config.update({ accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY, secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY, region: process.env.REACT_APP_AWS_REGION });
+AWS.config.update({ accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY, secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY });
 const s3 = new AWS.S3();
-/* Configurar el bucket deshabilitando el bloqueo a acceso público y agregando en CORS:
-      <CORSConfiguration>
-       <CORSRule>
-         <AllowedOrigin>*</AllowedOrigin>
-         <AllowedMethod>GET</AllowedMethod>
-         <AllowedHeader>*</AllowedHeader>
-       </CORSRule>
-      </CORSConfiguration>*/
+//----------------------------------------------------endregion
 
 function App() {
 
@@ -41,6 +35,7 @@ function App() {
   const [filename, setFilename] = useState();
   const [s3objects, setS3objects] = useState([]);
   const [inProgress, setInProgress] = useState(false);
+  const [disableUpload, setDisableUpload] = useState(true);
 
   type Severity = 'success' | 'error';
   const [feedback, setFeedback] = useState({
@@ -55,6 +50,7 @@ function App() {
 
   function handleUpload() {
     setInProgress(true);
+    console.log('REACT_APP_GET_PRESIGNED_URL', process.env.REACT_APP_GET_PRESIGNED_URL);
     axios(`${process.env.REACT_APP_GET_PRESIGNED_URL}=${filename.name}`).then(response => {
       // Getting the url from response
       console.log('presigned url', response.data.fileUploadURL);
@@ -86,11 +82,12 @@ function App() {
 
   function handleList() {
 
-    s3.listObjectsV2({ Bucket: process.env.REACT_APP_S3_BUCKET }, (err:any, data:any) => {
+    s3.listObjectsV2({ Bucket: `${process.env.REACT_APP_S3_BUCKET}-resized` }, (err:any, data:any) => {
       if (err) {
         console.log('Error received');
         throw err;
       }
+      console.log(data.Contents);
       setS3objects(data.Contents);
     })
   }
@@ -109,7 +106,7 @@ function App() {
       <Container maxWidth='md'>
         <Box my={4} className='box'>
 
-          <Previews setFilename={setFilename} />
+          <Previews setFilename={setFilename} setDisableUpload={setDisableUpload} />
           {inProgress? <LinearProgress color="secondary" /> : <div style={{height: 4}}> </div>}<br />
 
           <Button
@@ -118,6 +115,7 @@ function App() {
             className={classes.button}
             startIcon={<CloudUploadIcon />}
             onClick={handleUpload}
+            disabled={disableUpload}
           >
             Upload
           </Button>
@@ -139,7 +137,7 @@ function App() {
               const filename = o.Key;
               return <div key={i}>
                 {`${filename}`}<br />
-                <img alt={`s3 hosted ${i}`} src={`${process.env.REACT_APP_S3_URL}/${filename}`} /><br /><br />
+                <img alt={`s3 hosted ${i}`} src={`https://${process.env.REACT_APP_S3_BUCKET}-resized.s3.${process.env.REACT_APP_AWS_REGION}.amazonaws.com/${filename}`} /><br /><br />
               </div>
             })
             : null}

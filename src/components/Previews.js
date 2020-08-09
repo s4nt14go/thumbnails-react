@@ -42,6 +42,7 @@ function Previews(props) {
     maxSize: 5242880,
     onDrop: acceptedFiles => {
       console.log('acceptedFiles', acceptedFiles);
+      props.setDisableUpload(!acceptedFiles.length);
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
       })));
