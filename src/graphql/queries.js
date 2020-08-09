@@ -13,7 +13,7 @@ export const getPost = /* GraphQL */ `
   }
 `;
 export const listResizedUrls = /* GraphQL */ `
-  query ListUrls(
+  query ListResizedUrls(
     $filter: TableResizedUrlFilterInput
     $limit: Int
     $nextToken: String

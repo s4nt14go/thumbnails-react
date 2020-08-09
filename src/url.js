@@ -14,7 +14,7 @@ class Url extends React.Component {
     return items.map((post) => {
       return (
         <div key={post.id}>
-          <h1>{post.url}</h1>
+          <span>{post.url}</span>
           {/*<p>{post.body}</p>
           <time dateTime={post.createdAt}>{
             new Date(post.createdAt).toDateString()}</time>
