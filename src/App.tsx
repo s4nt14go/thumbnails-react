@@ -14,6 +14,7 @@ import Previews from './components/Previews';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import axios from 'axios';
+import DisplayPosts from './displayPosts';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -105,6 +106,8 @@ function App() {
 
       <Container maxWidth='md'>
         <Box my={4} className='box'>
+
+          <DisplayPosts />
 
           <Previews setFilename={setFilename} setDisableUpload={setDisableUpload} />
           {inProgress? <LinearProgress color="secondary" /> : <div style={{height: 4}}> </div>}<br />
