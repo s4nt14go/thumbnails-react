@@ -135,7 +135,8 @@ function App() {
             s3objects.map((o, i) => {
               // @ts-ignore
               const filename = o.Key;
-              return <div key={i}>
+              // @ts-ignore
+              return <div key={o.ETag}>
                 {`${filename}`}<br />
                 <img alt={`s3 hosted ${i}`} src={`https://${process.env.REACT_APP_S3_BUCKET}-resized.s3.${process.env.REACT_APP_AWS_REGION}.amazonaws.com/${filename}`} /><br /><br />
               </div>
