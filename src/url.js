@@ -1,26 +1,26 @@
 import React from 'react';
-import EditPost from './editPost'
-import DeletePost from './deletePost'
+/*import EditPost from './editPost'
+import DeletePost from './deletePost'*/
 
-class Post extends React.Component {
+class Url extends React.Component {
 
-  componentDidMount() {
+  /*componentDidMount() {
     this.props.subscribeToMore();
-  }
+  }*/
 
   render() {
-    const items = this.props.data.listPosts.items;
+    const items = this.props.data.listResizedUrls.items;
 
     return items.map((post) => {
       return (
         <div key={post.id}>
-          <h1>{post.title}</h1>
-          <p>{post.body}</p>
+          <h1>{post.url}</h1>
+          {/*<p>{post.body}</p>
           <time dateTime={post.createdAt}>{
             new Date(post.createdAt).toDateString()}</time>
           <br />
           <EditPost {...post} />
-          <DeletePost {...post} />
+          <DeletePost {...post} />*/}
         </div>
 
       )
@@ -28,4 +28,4 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+export default Url;

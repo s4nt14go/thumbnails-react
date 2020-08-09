@@ -1,11 +1,11 @@
 import React from 'react'
 import { Query } from 'react-apollo'
-import { listPosts } from './graphql/queries';
+import { listResizedUrls } from './graphql/queries';
 import { onCreatePost } from './graphql/subscriptions'
 import gql from 'graphql-tag';
-import Post from './post'
+import Url from './url'
 
-class DisplayPosts extends React.Component {
+class DisplayUrls extends React.Component {
 
   subsCribeNewPosts = (subscribeToMore) => {
     return subscribeToMore({
@@ -27,14 +27,14 @@ class DisplayPosts extends React.Component {
   render() {
     return (
       <div className="posts">
-        <Query query={gql(listPosts)}  >
+        <Query query={gql(listResizedUrls)}  >
           {({ loading, data, error, subscribeToMore }) => {
 
             if (loading) return <p>loading...</p>;
             if (error) return <p>{error.message}</p>;
 
-            return <Post data={data} subscribeToMore={() =>
-              this.subsCribeNewPosts(subscribeToMore)} />
+            return <Url data={data} /*subscribeToMore={() =>
+              this.subsCribeNewPosts(subscribeToMore)}*/ />
           }}
         </Query>
 
@@ -46,4 +46,4 @@ class DisplayPosts extends React.Component {
 }
 
 
-export default DisplayPosts;
+export default DisplayUrls;

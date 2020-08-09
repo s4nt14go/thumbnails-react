@@ -12,19 +12,16 @@ export const getPost = /* GraphQL */ `
     }
   }
 `;
-export const listPosts = /* GraphQL */ `
-  query ListPosts(
-    $filter: ModelPostFilterInput
+export const listResizedUrls = /* GraphQL */ `
+  query ListUrls(
+    $filter: TableResizedUrlFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listResizedUrls(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        body
-        createdAt
-        updatedAt
+        url
       }
       nextToken
     }
