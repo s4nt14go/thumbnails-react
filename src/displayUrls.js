@@ -59,7 +59,7 @@ class DisplayUrls extends React.Component {
             this.subscribeNewUrls(subscribeToMore);
             this.subscribeUrlUpdated(subscribeToMore);
 
-            return <Url data={data} />
+            return <Url urls={data.listResizedUrls.items} />
           }}
         </Query>
 
