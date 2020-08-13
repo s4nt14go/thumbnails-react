@@ -1,9 +1,9 @@
 import React from 'react'
 import { Query } from 'react-apollo'
-import { listResizedUrls } from './graphql/queries';
-import { onCreateResizedUrl, onUpdateResizedUrl } from './graphql/subscriptions'
+import { listResizedUrls } from '../graphql/queries';
+import { onCreateResizedUrl, onUpdateResizedUrl } from '../graphql/subscriptions'
 import gql from 'graphql-tag';
-import Url from './url'
+import Url from './Url'
 
 class DisplayUrls extends React.Component {
 

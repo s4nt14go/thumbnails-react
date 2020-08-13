@@ -13,8 +13,8 @@ import Previews from './components/Previews';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import axios from 'axios';
-import DisplayUrls from './displayUrls';
-import Url from "./url";
+import DisplayUrls from './components/DisplayUrls';
+import Url from "./components/Url";
 
 // region ---------------------------------------------------- s3.listObjectsV2 setup
 const AWS = require('aws-sdk/global');

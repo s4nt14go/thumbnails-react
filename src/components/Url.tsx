@@ -14,7 +14,7 @@ const Url: React.FC<Props> = ({urls}) => {
   return <>
     {urls.map(({url, id}, i) => {
       return <div key={id}>
-        {`${url}`}<br />
+        {`${url.slice(url.lastIndexOf('/') + 1 )}`}<br />
         <img alt={`s3 hosted ${i}`} src={url} /><br /><br />
       </div>
     })}
