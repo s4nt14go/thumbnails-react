@@ -43,3 +43,4 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 /cmds.sh
 /src/graphql/schema.json.png
+/src/graphql/schema.json
