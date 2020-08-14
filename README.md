@@ -39,8 +39,7 @@ This project is composed by two repositories: this one which is the React fronte
         "aws_appsync_apiKey": "YOUR APPSYNC API KEY"
     };
     ```
-   You should replace `YOUR REGION`, `YOUR APPSYNC API ENDPOINT` and `YOUR APPSYNC API KEY`, but let `API_KEY` as is.
-1. 
+   You should replace `YOUR REGION`, `YOUR APPSYNC API ENDPOINT` and `YOUR APPSYNC API KEY`, but let `API_KEY` as is.<br /><br />
 1. Install dependencies<br /><br />
 `npm i`<br /><br />
 1. Run the project<br /><br />
